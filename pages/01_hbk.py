@@ -13,7 +13,6 @@ import matplotlib.font_manager as fm
 
 plt.rcParams['font.family'] = 'NanumBarunGothic'
 
-
 def replace_text(input_text):
     # img 태그 제거
     input_text = re.sub(r'<img[^>]*>', '', input_text)
@@ -53,14 +52,6 @@ def render_latex_for_streamlit(text):
             align_block += line + '\n'
         else:
             st.write(line)
-            # 문장 중간의 LaTeX 수식 처리
-            # parts = line.split('$')
-            # for i, part in enumerate(parts):
-            #     # 짝수 인덱스는 일반 텍스트, 홀수 인덱스는 LaTeX 수식
-            #     if i % 2 == 0:
-            #         st.write(part)
-            #     else:
-            #         st.latex(part)
 
 
 # 애플리케이션의 제목 설정
@@ -120,6 +111,9 @@ def main():
     if sidebar.button('버튼 클릭'):
         response = chain.invoke({"question" : question_input, "solving" : answer_input})
 
+        st.text_area("raw data", response.content, height=100)
+
+        st.write("latex rendering")
         render_latex_for_streamlit(response.content)
 
         
