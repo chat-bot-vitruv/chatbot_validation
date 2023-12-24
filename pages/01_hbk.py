@@ -6,10 +6,8 @@ from langchain.callbacks import StreamingStdOutCallbackHandler
 from langchain.prompts.few_shot import FewShotPromptTemplate
 
 from langchain.prompts.prompt import PromptTemplate
-from IPython.display import display, Latex
 from files.example_data import examples
 import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
 
 plt.rcParams['font.family'] = 'NanumBarunGothic'
 
