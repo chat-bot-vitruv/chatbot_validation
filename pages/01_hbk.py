@@ -67,7 +67,7 @@ llm = ChatOpenAI(
     ],
 )
 
-example_prompt = PromptTemplate.from_template("Human: {question} {solving} {answer}\nAI:{aiAnswer}")
+example_prompt = PromptTemplate.from_template("Human: {question} {solving} {answer}\n {aiAnswer}")
 
 
 prompt = FewShotPromptTemplate(
@@ -92,6 +92,18 @@ You must answer in Korean.
 chain = prompt | llm
 
 def main():
+    st.markdown(
+        """
+        ### 사용 방법
+        1. [어드민 페이지](https://ai.matamath.net/admin/question)에서 원하는 문제를 선택한 후 문제의 개념/용어 태깅을 off한다
+        2. 문제와 텍스트를 입력란에 복붙한다
+        3. 답안 생성 타입을 선택한다
+        4. 실행 버튼 클릭
+
+        > 답안생성까지 최대 2분 정도 소요됩니다.
+            
+        """
+    )
         
     # 사이드바 생성
     sidebar = st.sidebar
@@ -105,16 +117,22 @@ def main():
     st.markdown('<style>div.stTextInput>div{border:2px solid #4CAF50;}</style>', unsafe_allow_html=True)
 
     # 상단의 단일 텍스트 박스 추가
-    text_box_1 = st.text_area("Prompt 입력 데이터(전처리", replace_text(question_input), height=100)
+    # text_box_1 = st.text_area("Prompt 입력 데이터(전처리", replace_text(question_input), height=100)
 
     # 사이드바에 버튼 추가
     if sidebar.button('버튼 클릭'):
-        response = chain.invoke({"question" : question_input, "solving" : answer_input})
+        response = None;
 
-        st.text_area("raw data", response.content, height=100)
+        with st.status("해설을 생성하는 중...") as status:
+            response = chain.invoke({"question" : question_input, "solving" : answer_input})
 
-        st.write("latex rendering")
-        render_latex_for_streamlit(response.content)
+        if response:
+            st.markdown("---")
+            st.markdown("## Raw Result Data")
+            st.write(response.content)
+            st.markdown("---")
+            st.markdown("## st.latex Result Data")
+            render_latex_for_streamlit(response.content)
 
         
 
