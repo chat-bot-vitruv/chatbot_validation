@@ -16,6 +16,10 @@ def replace_text(input_text):
 
     return input_text
 
+st.set_page_config(
+    page_title="Home",
+    page_icon="🥕",
+)
 
 # 애플리케이션의 제목 설정
 st.title('Chat bot 검증사이트')
